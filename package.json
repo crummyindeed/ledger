@@ -1,6 +1,6 @@
 {
   "name": "crummyledger",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "distributed decentralized app-scale ledger",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "decentralized"
   ],
   "author": "Cody Crumrine",
-  "license": "UNLICENSED",
+  "license": "GNU AGPL v3.0",
   "bugs": {
     "url": "https://github.com/crummyindeed/ledger/issues"
   },
