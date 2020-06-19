@@ -1,1 +1,3 @@
 # ledger
+
+O IHAVE A GOOD TIPS IDEA
