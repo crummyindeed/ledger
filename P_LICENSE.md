@@ -2,10 +2,11 @@ Patron License
 
 Payment Platforms: Patreon
 
-<https://www.patreon.com/user?u=32501241> {{/platforms}}
-Participating Contributors: {{#contributors}}
+<https://www.patreon.com/user?u=32501241>
 
-{{{name}}} {{/contributors}}
+Participating Contributors:
+
+
 Purpose
 This license gives everyone patronizing contributors to this software permission to ignore any noncommercial or copyleft rules of its free public license, while continuing to protect contributors from liability.
 
