@@ -66,7 +66,7 @@ Ledger.prototype.init = async function () {
     var confirmed = await self.processEvent(event);
     if (confirmed) {
       for (let i in self.subscriptions.event) {
-        self.subscriptions.event[i]();
+        self.subscriptions.event[i](JSON.parse(event));
       }
       context.relay('event', event);
     } else {
