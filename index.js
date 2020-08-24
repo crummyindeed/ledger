@@ -133,6 +133,26 @@ Ledger.prototype.shutDown = function () {
   clearTimeout(this.heartbeat_timeout);
 }
 
+Ledger.prototype.challenge = function (id) {
+  var last = this.getLastMilestone();
+  if (last) {
+    this.stream.shout('challenge', { id, from_ms: last });
+  } else {
+    this.stream.shout('challenge', { id });
+  }
+};
+
+Ledger.prototype.buildProofChain = async function ({ id, from_ms }) {
+  var chain = [];
+  await this.store.dflfs({
+    from_id: id,
+    to_id: from_ms,
+    reducer: (event) => {
+      chain.push(JSON.stringify(event));
+    }
+  });
+  return chain;
+};
 
 /*
 Event Creation and Proceessing
