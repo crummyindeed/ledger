@@ -41,6 +41,7 @@ db3.setReducer('increment', function (state, issuer, payload) {
 db1.onMilestone(async function () {
   console.log('db1 got ms');
   var state = await db1.getState();
+  console.log(state);
   if (state.counter == 1) {
     console.log('first');
   } else if (state.counter == 2) {
@@ -54,6 +55,7 @@ db2.onMilestone(async function () {
   console.log('db2 got ms');
   var ms = db2.getLastMilestone();
   var state = await db2.getState();
+  console.log(state);
   if (state.counter == 1) {
     console.log('first');
   } else if (state.counter == 2) {
@@ -67,6 +69,7 @@ db3.onMilestone(async function () {
   console.log('db3 got ms');
   var ms = db3.getLastMilestone();
   var state = await db3.getState();
+  console.log(state);
   if (state.counter == 1) {
     console.log('first');
   } else if (state.counter == 2) {
@@ -110,28 +113,11 @@ describe('startServer(port, callback)', function () {
   });
 });
 
-describe('hello', function () {
-  it('should broadcast presence on the network when joining', async function () {
-    db3.connectTo('localhost', '1337', function () { });
-    await waitFor(500);
-    expect(Object.keys(db1.listKown()).length).to.equal(2);
-    expect(Object.keys(db2.listKown()).length).to.equal(1);
-    expect(Object.keys(db3.listKown()).length).to.equal(0);
-  });
-
-  it('should broadcast every 0-3 seconds if nothing else to communicate', async function () {
-    this.timeout(5000);
-    await waitFor(4000);
-    expect(Object.keys(db1.listKown()).length).to.equal(2);
-    expect(Object.keys(db2.listKown()).length).to.equal(2);
-    expect(Object.keys(db3.listKown()).length).to.equal(2);
-  });
-});
-
 describe('createEvent', function () {
   it('should create and save valid event', async function () {
     this.timeout(15000);
     id1 = await db1.createEvent('increment', 'up');
+    console.log(id1);
     var state = await db1.getStateAt(id1);
     expect(state.counter).to.equal(1);
   });
@@ -150,6 +136,7 @@ describe('createEvent', function () {
       }
       db1.onEvent(onEvent);
       id2 = await db2.createEvent('increment', 'up');
+      console.log(id2);
     })();
   });
 });
@@ -171,5 +158,4 @@ describe('getStateAt(milestone  [,filter])', function () {
     expect(state.counter).to.equal(0);
   });
 });
-
 console.log('waiting for milsetones to get picked up: ');
