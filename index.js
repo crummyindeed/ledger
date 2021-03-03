@@ -229,9 +229,50 @@ LedgerGraph.prototype.getState = async function (authority) {
   });
 };
 
+LedgerGraph.prototype.getStateCustom = async function (authority, base_state, reducers) {
+  if (typeof this.milestones[authority] == 'undefined' || this.milestones[authority].length == 0) {
+    return base_state;
+  }
+  var most_recent = this.milestones[authority][0];
+  return await this.getStateAtCustom(most_recent, function(type, issuer, payload, digest){
+    return payload._auth == authority;
+  }, base_state, reducers);
+};
+
+LedgerGraph.prototype.getStateAtCustom = async function (milestone, filter, base_state, reducers) {
+  var state = JSON.parse(JSON.stringify(base_state));
+  await this.store.dflfs({
+    from_id: milestone, reducer: (event) => {
+      var type = event.typ;
+      var issuer = event.iss;
+      var payload = event.pay;
+      var digest = event.dig;
+      if (typeof reducers[type] == 'function') {
+        if (typeof filter == 'function') {
+          if (filter(type, issuer, payload, digest)) {
+            reducers[type](state, issuer, payload, digest);
+          }
+        } else {
+          reducers[type](state, issuer, payload, digest);
+        }
+      }
+    }
+  });
+  return state;
+};
+
 LedgerGraph.prototype.setReducer = function (type, callback) {
   this.reducers[type] = callback;
 };
+
+LedgerGraph.prototype.useFramework = function(framework){
+  this.base_state = framework.base_state;
+  this.call = {};
+  for(var i in framework.events){
+    var args = framework.events[i].args;
+    this.call[framework.events]
+  }
+}
 
 /*
 Utilities & Consensus

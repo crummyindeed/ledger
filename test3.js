@@ -3,6 +3,8 @@ const rimraf = require('rimraf');
 const expect = require("chai").expect;
 const fs = require('fs');
 
+const Counter = require("./sample_ledger.js");
+
 rimraf.sync('./test_db');
 rimraf.sync('./test_db2');
 rimraf.sync('./test_db3');
@@ -13,57 +15,35 @@ var db1 = new LedgerGraph({
   store_path: "./test_db",
   private_key: "0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"
 });
+var c1 = new Counter(db1);
 
 var db2 = new LedgerGraph({
   base_state: { counter: 0 },
   store_path: "./test_db2",
   private_key: "2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c"
 });
+var c2 = new Counter(db2);
 
 var db3 = new LedgerGraph({
   base_state: { counter: 0 },
   store_path: "./test_db3",
   private_key: "3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e"
 });
+var c3 = new Counter(db3);
 
-db1.setReducer('increment', function (state, issuer, payload) {
-  state.counter++;
-});
-
-db2.setReducer('increment', function (state, issuer, payload) {
-  state.counter++;
-});
-
-db3.setReducer('increment', function (state, issuer, payload) {
-  state.counter++;
-});
-
-db1.onMilestone('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07', async function(){
+c1.onMilestone(async function(){
   console.log('db1 got ms');
-  var state = await db1.getState('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07');
-  console.log(state);
+  console.log(await c1.getCount());
 });
 
-db2.onMilestone('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07', async function(){
+c2.onMilestone(async function(){
   console.log('db2 got ms');
-  var state = await db2.getState('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07');
-  console.log(state);
+  console.log(await c2.getCount());
 });
 
-db3.onMilestone('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07', async function(){
+c3.onMilestone(async function(){
   console.log('db3 got ms');
-  var state = await db3.getState('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07');
-  console.log(state);
-});
-
-db1.onEvent(function(event){
-  console.log('db1 got event', event.typ);
-});
-db2.onEvent(function(event){
-  console.log('db2 got event', event.typ);
-});
-db3.onEvent(function(event){
-  console.log('db3 got event', event.typ);
+  console.log(await c3.getCount());
 });
 
 var test = async function(){
@@ -74,8 +54,7 @@ var test = async function(){
   db1.startServer('1337', function () {
     db2.connectTo('localhost', '1337', function () {
       db3.connectTo('localhost', '1337', async function(){
-        var id = await db2.createEvent('increment',{},'9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07');
-        console.log(id);
+        var id = await c2.increment();
         setTimeout(function(){
           db2.createMilestone('9475c6cf0eda34057528d8694781ecc92ad639d7e2bd27761ed3ef74924beb07',id);
         }, 500);
