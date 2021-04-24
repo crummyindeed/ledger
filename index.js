@@ -67,6 +67,10 @@ LedgerGraph.prototype.init = async function(){
       var valid = await self.processEvent(data.prf[i]);
     }
   });
+
+  this.stream.subscribe('ping', async function(data, context){
+    context.reply('pingback', {});
+  });
 };
 
 /*
@@ -95,6 +99,10 @@ LedgerGraph.prototype.connectTo = function(address, port, callBack){
   this.stream.connectTo(address, port, function(){
     callBack();
   });
+}
+
+LedgerGraph.prototype.ping = function(){
+  var self = this;
 }
 
 LedgerGraph.prototype.shutDown = function(){

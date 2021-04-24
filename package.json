@@ -1,6 +1,6 @@
 {
   "name": "crummyledger",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "distributed decentralized app-scale ledger",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
   "dependencies": {
     "@the3rdc/netshout": "^1.4.2",
     "crummyevents": "^1.1.0",
-    "crummygraph": "^1.0.1"
+    "crummygraph": "^1.0.1",
+    "elliptic": "^6.5.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",
