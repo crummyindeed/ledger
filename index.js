@@ -15,7 +15,7 @@ var LedgerGraph = function({
   debug}){
   this.base_state = base_state;
   this.reducers = {};
-  this.private = private_key;
+  this.private_key = private_key;
   this.store_path = store_path;
   this.ms_file = path.join(store_path, 'milestones.js');
   try {
@@ -135,7 +135,7 @@ Event Creation and Processing
 */
 
 LedgerGraph.prototype.createEvent = async function (type, payload, authority){
-  if(this.private == false){
+  if(this.private_key == false){
     throw "cannot create events without a private key";
   }
   //need a way to choose what MS to get tips from
@@ -161,7 +161,7 @@ LedgerGraph.prototype.createEvent = async function (type, payload, authority){
     payload: payload,
     left: left,
     right: right
-  }, this.private);
+  }, this.private_key);
 
   var decoded = JSON.parse(event);
 
@@ -383,7 +383,7 @@ LedgerGraph.prototype.validateMilestone = async function (event, authority) {
 }
 
 LedgerGraph.prototype.createMilestone = async function (authority, right) {
-  if (this.private == false) {
+  if (this.private_key == false) {
     return;
   }
   var ms = this.getLastMilestone(authority);
@@ -398,7 +398,7 @@ LedgerGraph.prototype.createMilestone = async function (authority, right) {
     },
     left: ms,
     right: right
-  }, this.private);
+  }, this.private_key);
 
   var decoded = JSON.parse(event);
 
