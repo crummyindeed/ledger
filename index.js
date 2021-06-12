@@ -150,7 +150,7 @@ LedgerGraph.prototype.createEvent = async function (type, payload, authority){
   }else{
     var index = Math.floor(Math.random() * tips.length);
     var left = tips[index];
-    tips.splce(index,1);
+    tips.splice(index,1);
     var right = tips[Math.floor(Math.random() * tips.length)];
   }
 
