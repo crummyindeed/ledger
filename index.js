@@ -64,7 +64,11 @@ LedgerGraph.prototype.init = async function(){
 
   this.stream.subscribe('proof', async function(data){
     for (let i in data.prf){
-      var valid = await self.processEvent(data.prf[i]);
+      //this needs moved in to crummyledger
+      var confirmed = await self.processEvent(data.prf[i]);
+      if(confirmed){
+        self.stream.shout('event', data.prf[i]);
+      }
     }
   });
 

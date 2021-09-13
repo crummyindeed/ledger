@@ -1,6 +1,6 @@
 {
   "name": "crummyledger",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "distributed decentralized app-scale ledger",
   "main": "index.js",
   "scripts": {
