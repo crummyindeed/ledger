@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/crummyindeed/ledger#readme",
   "dependencies": {
-    "@the3rdc/netshout": "^1.4.2",
+    "@the3rdc/netshout": "^1.4.3",
     "crummyevents": "^1.1.2",
     "crummygraph": "^1.0.1",
     "elliptic": "^6.5.4"
