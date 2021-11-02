@@ -286,6 +286,20 @@ LedgerGraph.prototype.useFramework = function(framework){
   }
 }
 
+LedgerGraph.prototype.query = function({authority, callBack}){
+  //TODO: Since ID and Filters
+  //false == NONE (doesn't matter which!)
+  if (typeof this.milestones[authority] == 'undefined' || this.milestones[authority].length == 0) {
+    callBack(false);
+  }
+  var most_recent = this.milestones[authority][0];
+  this.store.dflfs({
+    from_id: most_recent, reducer: (event) => {
+      callBack(event);
+    }
+  });
+};
+
 /*
 Utilities & Consensus
 */
