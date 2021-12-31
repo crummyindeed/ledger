@@ -75,6 +75,14 @@ LedgerGraph.prototype.init = async function(){
   this.stream.subscribe('ping', async function(data, context){
     context.reply('pingback', {});
   });
+
+  this.stream.subscribe('catchUp',async function(data, context){
+    var latest = self.getLastMilestone(authority);
+    if(latest){
+      var ms_event = JSON.parse(await self.store.get(latest));
+      self.context.reply('event', JSON.stringify(ms_event.event));
+    }
+  })
 };
 
 /*
@@ -120,6 +128,10 @@ LedgerGraph.prototype.challenge = function(id, authority){
   }else{
     this.stream.shout('challenge', {id});
   }
+}
+
+LedgerGraph.prototype.catchUp = function(authority){
+  this.stream.shout('catchUp', {auth: authority});
 }
 
 LedgerGraph.prototype.buildProofChain = async function({id, from_ms}) {
