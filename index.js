@@ -77,6 +77,7 @@ LedgerGraph.prototype.init = async function(){
   });
 
   this.stream.subscribe('catchUp',async function(data, context){
+    var authority = data.auth;
     var latest = self.getLastMilestone(authority);
     if(latest){
       var ms_event = JSON.parse(await self.store.get(latest));
