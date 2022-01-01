@@ -81,7 +81,7 @@ LedgerGraph.prototype.init = async function(){
     var latest = self.getLastMilestone(authority);
     if(latest){
       var ms_event = JSON.parse(await self.store.get(latest));
-      self.context.reply('event', JSON.stringify(ms_event.event));
+      context.reply('event', JSON.stringify(ms_event.event));
     }
   })
 };
